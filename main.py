@@ -49,6 +49,7 @@ class Snake:
         self.body = [[500, 280], [490, 280], [480, 280]]
         self.flag = True
         self.apple_cords = 0, 0
+        self.speed = Speed()
 
     def run_right(self):
         if self.flag:
@@ -68,6 +69,7 @@ class Snake:
             Apple().del_apples()
             self.apple_cords = Apple(all_sprites).make_apple()
             self.flag = False
+            self.speed.speed_up()
             self.body.append([self.head[0], self.head[1]])
         if self.head[0] > 1000:
             self.head = [500, 280]
@@ -102,6 +104,7 @@ class Snake:
             self.apple_cords = Apple(all_sprites).make_apple()
             self.body.append([self.head[0], self.head[1]])
             self.flag = False
+            self.speed.speed_up()
         if self.head[0] < 0:
             self.head = [500, 280]
             self.body = [[500, 280], [490, 280], [480, 280]]
@@ -134,7 +137,10 @@ class Snake:
             Apple().del_apples()
             self.apple_cords = Apple(all_sprites).make_apple()
             self.body.append([self.head[0], self.head[1]])
+            self.speed.speed_up()
+            print(self.speed.ret_speed())
             self.flag = False
+            self.speed.speed_up()
         if self.head[1] > 650:
             self.head = [500, 280]
             self.body = [[500, 280], [490, 280], [480, 280]]
@@ -181,9 +187,13 @@ class Snake:
                 self.apple_cords = Apple(all_sprites).make_apple()
                 self.body.append([self.head[0], self.head[1]])
                 self.flag = False
+                self.speed.speed_up()
             else:
                 del self.body[-1]
             return False
+
+    def update_speed(self):
+        return self.speed.ret_speed()
 
 
 def terminate():
@@ -219,6 +229,20 @@ def start_screen():
                 return True  # начинаем игру
         pygame.display.flip()
         clock.tick(100)
+
+
+class Speed:
+    def __init__(self):
+        self.speed = 70
+
+    def speed_up(self):
+        self.speed += 2
+
+    def del_speed(self):
+        self.speed = 20
+
+    def ret_speed(self):
+        return self.speed
 
 
 def end_game():
@@ -264,6 +288,7 @@ END = False
 snake = Snake()
 while running:
     screen.fill(pygame.Color('black'))
+    speed = snake.update_speed()
     if not (down or up or right or left):
         apples_cords = []
         pygame.draw.rect(screen, pygame.Color('red'), (500, 280, 10, 10))
@@ -314,6 +339,6 @@ while running:
             down = False
             do = True
     all_sprites.draw(screen)
-    clock.tick(20)
+    clock.tick(speed)
     pygame.display.flip()
 pygame.quit()
