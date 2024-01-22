@@ -50,18 +50,29 @@ class Snake:
         self.flag = True
         self.apple_cords = 0, 0
 
-    def run_right(self, cords):
+    def run_right(self):
         if self.flag:
-            self.apple_cords = cords
+            self.apple_cords = Apple(all_sprites).make_apple()
+            self.flag = False
         self.head[0] += 10
+        for el in self.body[1:]:
+            if self.head[0] == el[0] and self.head[1] == el[1]:
+                self.head = [500, 280]
+                self.body = [[500, 280], [490, 280], [480, 280]]
+                self.flag = True
+                Apple().del_apples()
+                end_game()
+                return True
         if self.head[0] == self.apple_cords[0] and self.head[1] == self.apple_cords[1]:
             print('TRUE')
             Apple().del_apples()
             self.apple_cords = Apple(all_sprites).make_apple()
             self.flag = False
+            self.body.append([self.head[0], self.head[1]])
         if self.head[0] > 1000:
             self.head = [500, 280]
             self.body = [[500, 280], [490, 280], [480, 280]]
+            self.flag = True
             Apple().del_apples()
             end_game()
             return True
@@ -72,18 +83,29 @@ class Snake:
             del self.body[-1]
             return False
 
-    def run_left(self, cords):
+    def run_left(self):
         if self.flag:
-            self.apple_cords = cords
+            self.apple_cords = Apple(all_sprites).make_apple()
+            self.flag = False
         self.head[0] -= 10
+        for el in self.body[1:]:
+            if self.head[0] == el[0] and self.head[1] == el[1]:
+                self.head = [500, 280]
+                self.body = [[500, 280], [490, 280], [480, 280]]
+                self.flag = True
+                Apple().del_apples()
+                end_game()
+                return True
         if self.head[0] == self.apple_cords[0] and self.head[1] == self.apple_cords[1]:
             print('TRUE')
             Apple().del_apples()
             self.apple_cords = Apple(all_sprites).make_apple()
+            self.body.append([self.head[0], self.head[1]])
             self.flag = False
         if self.head[0] < 0:
             self.head = [500, 280]
             self.body = [[500, 280], [490, 280], [480, 280]]
+            self.flag = True
             Apple().del_apples()
             end_game()
             return True
@@ -94,18 +116,29 @@ class Snake:
             del self.body[-1]
             return False
 
-    def run_down(self, cords):
+    def run_down(self):
         if self.flag:
-            self.apple_cords = cords
+            self.apple_cords = Apple(all_sprites).make_apple()
+            self.flag = False
         self.head[1] += 10
+        for el in self.body[1:]:
+            if self.head[0] == el[0] and self.head[1] == el[1]:
+                self.head = [500, 280]
+                self.body = [[500, 280], [490, 280], [480, 280]]
+                self.flag = True
+                Apple().del_apples()
+                end_game()
+                return True
         if self.head[0] == self.apple_cords[0] and self.head[1] == self.apple_cords[1]:
             print('TRUE')
             Apple().del_apples()
             self.apple_cords = Apple(all_sprites).make_apple()
+            self.body.append([self.head[0], self.head[1]])
             self.flag = False
         if self.head[1] > 650:
             self.head = [500, 280]
             self.body = [[500, 280], [490, 280], [480, 280]]
+            self.flag = True
             Apple().del_apples()
             end_game()
             return True
@@ -116,14 +149,24 @@ class Snake:
             del self.body[-1]
             return False
 
-    def run_up(self, cords):
+    def run_up(self):
         if self.flag:
-            self.apple_cords = cords
+            self.apple_cords = Apple(all_sprites).make_apple()
+            self.flag = False
         self.head[1] -= 10
+        for el in self.body[1:]:
+            if self.head[0] == el[0] and self.head[1] == el[1]:
+                self.head = [500, 280]
+                self.body = [[500, 280], [490, 280], [480, 280]]
+                self.flag = True
+                Apple().del_apples()
+                end_game()
+                return True
         print(self.apple_cords)
         if self.head[1] < 0:
             self.head = [500, 280]
             self.body = [[500, 280], [490, 280], [480, 280]]
+            self.flag = True
             Apple().del_apples()
             end_game()
             return True
@@ -136,6 +179,7 @@ class Snake:
                 Apple().del_apples()
                 # Apple(all_sprites)
                 self.apple_cords = Apple(all_sprites).make_apple()
+                self.body.append([self.head[0], self.head[1]])
                 self.flag = False
             else:
                 del self.body[-1]
@@ -208,7 +252,6 @@ def end_game():
 all_sprites = pygame.sprite.Group()
 clock = pygame.time.Clock()
 start_screen()
-cds = Apple(all_sprites).make_apple()
 running = True
 right = False
 left = False
@@ -216,8 +259,8 @@ down = False
 up = False
 do = True
 END = False
-TIMEREVENT = pygame.USEREVENT + 1
-pygame.time.set_timer(TIMEREVENT, 5000)
+# TIMEREVENT = pygame.USEREVENT + 1
+# pygame.time.set_timer(TIMEREVENT, 5000)
 snake = Snake()
 while running:
     screen.fill(pygame.Color('black'))
@@ -255,19 +298,19 @@ while running:
             left = False
             right = False
     if right:
-        if snake.run_right(cds):
+        if snake.run_right():
             right = False
             do = True
     if left:
-        if snake.run_left(cds):
+        if snake.run_left():
             left = False
             do = True
     if up:
-        if snake.run_up(cds):
+        if snake.run_up():
             up = False
             do = True
     if down:
-        if snake.run_down(cds):
+        if snake.run_down():
             down = False
             do = True
     all_sprites.draw(screen)
