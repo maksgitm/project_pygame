@@ -214,7 +214,13 @@ def start_screen():
                   "Правила игры",
                   "Наберите как можно больше очков,",
                   "поглощая яблоки. Управляйте змейкой",
-                  "с помощью клавиш перемещения (стрелочек)"]
+                  "с помощью клавиш перемещения (стрелочек)",
+                  "",
+                  "",
+                  "",
+                  "",
+                  "",
+                  "НАЖМИТЕ НА ПРОБЕЛ, ЧТОБЫ ПРОДОЛЖИТЬ"]
 
     fon = pygame.transform.scale(load_image('snake_fon.jpg'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
@@ -299,7 +305,7 @@ while running:
     speed = snake.update_speed()
     if not (down or up or right or left):
         apples_cords = []
-        pygame.draw.rect(screen, pygame.Color('red'), (500, 280, 10, 10))
+        pygame.draw.rect(screen, pygame.Color('red'), (500, 280, 30, 10))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             terminate()
@@ -312,7 +318,7 @@ while running:
             down = False
             left = False
             right = True
-        if keys[pygame.K_LEFT] and (down or up or do):
+        if keys[pygame.K_LEFT] and (down or up):
             do = False
             up = False
             down = False
