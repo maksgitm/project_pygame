@@ -61,6 +61,7 @@ class Snake:
                 self.head = [500, 280]
                 self.body = [[500, 280], [490, 280], [480, 280]]
                 self.flag = True
+                self.speed.del_speed()
                 Apple().del_apples()
                 end_game()
                 return True
@@ -75,6 +76,7 @@ class Snake:
             self.head = [500, 280]
             self.body = [[500, 280], [490, 280], [480, 280]]
             self.flag = True
+            self.speed.del_speed()
             Apple().del_apples()
             end_game()
             return True
@@ -95,6 +97,7 @@ class Snake:
                 self.head = [500, 280]
                 self.body = [[500, 280], [490, 280], [480, 280]]
                 self.flag = True
+                self.speed.del_speed()
                 Apple().del_apples()
                 end_game()
                 return True
@@ -109,6 +112,7 @@ class Snake:
             self.head = [500, 280]
             self.body = [[500, 280], [490, 280], [480, 280]]
             self.flag = True
+            self.speed.del_speed()
             Apple().del_apples()
             end_game()
             return True
@@ -129,6 +133,7 @@ class Snake:
                 self.head = [500, 280]
                 self.body = [[500, 280], [490, 280], [480, 280]]
                 self.flag = True
+                self.speed.del_speed()
                 Apple().del_apples()
                 end_game()
                 return True
@@ -145,6 +150,7 @@ class Snake:
             self.head = [500, 280]
             self.body = [[500, 280], [490, 280], [480, 280]]
             self.flag = True
+            self.speed.del_speed()
             Apple().del_apples()
             end_game()
             return True
@@ -165,6 +171,7 @@ class Snake:
                 self.head = [500, 280]
                 self.body = [[500, 280], [490, 280], [480, 280]]
                 self.flag = True
+                self.speed.del_speed()
                 Apple().del_apples()
                 end_game()
                 return True
@@ -173,6 +180,7 @@ class Snake:
             self.head = [500, 280]
             self.body = [[500, 280], [490, 280], [480, 280]]
             self.flag = True
+            self.speed.del_speed()
             Apple().del_apples()
             end_game()
             return True
@@ -233,10 +241,10 @@ def start_screen():
 
 class Speed:
     def __init__(self):
-        self.speed = 70
+        self.speed = 20
 
     def speed_up(self):
-        self.speed += 2
+        self.speed += 1
 
     def del_speed(self):
         self.speed = 20
