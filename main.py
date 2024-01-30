@@ -299,6 +299,8 @@ do = True
 END = False
 # TIMEREVENT = pygame.USEREVENT + 1
 # pygame.time.set_timer(TIMEREVENT, 5000)
+font2 = pygame.font.SysFont('Arial', 30)
+string_rendered = font2.render('СЧЁТ: ', 1, pygame.Color('white'))
 snake = Snake()
 while running:
     screen.fill(pygame.Color('black'))
@@ -352,6 +354,7 @@ while running:
         if snake.run_down():
             down = False
             do = True
+    screen.blit(string_rendered, (0, 0))
     all_sprites.draw(screen)
     clock.tick(speed)
     pygame.display.flip()
