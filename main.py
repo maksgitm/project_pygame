@@ -5,7 +5,7 @@ import os
 
 
 pygame.init()
-WIDTH, HEIGHT = size = 1000, 650
+WIDTH, HEIGHT = size = 990, 645
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption('Змейка')
 
@@ -29,11 +29,17 @@ def load_image(name, colorkey=None):
 
 class Apple(pygame.sprite.Sprite):
     image = load_image('apple_for_snake.png')
+    image_gold = load_image('golden_apple.png')
 
     def __init__(self, *group):
         super().__init__(*group)
-        self.image = Apple.image
-        self.pos = [random.randrange(1, 99) * 10, random.randrange(1, 64) * 10]
+        choice = random.choice([Apple.image, Apple.image_gold, Apple.image, Apple.image, Apple.image])
+        if choice == Apple.image_gold:
+            self.score_diff = 250
+        else:
+            self.score_diff = 100
+        self.image = choice
+        self.pos = [random.randrange(1, 65) * 15, random.randrange(1, 42) * 15]
         self.rect = self.image.get_rect(topleft=(self.pos[0], self.pos[1]))
 
     def make_apple(self):
@@ -42,166 +48,172 @@ class Apple(pygame.sprite.Sprite):
     def del_apples(self):
         all_sprites.remove(all_sprites)
 
+    def get_score(self):
+        return self.score_diff
+
 
 class Snake:
     def __init__(self):
-        self.head = [500, 280]
-        self.body = [[500, 280], [490, 280], [480, 280]]
+        self.head = [495, 285]
+        self.body = [[495, 285], [480, 285], [465, 285]]
         self.flag = True
         self.apple_cords = 0, 0
         self.speed = Speed()
 
     def run_right(self):
         if self.flag:
-            self.apple_cords = Apple(all_sprites).make_apple()
+            self.apple = Apple(all_sprites)
+            self.apple_cords = self.apple.make_apple()
             self.flag = False
-        self.head[0] += 10
+        self.head[0] += 15
         for el in self.body[1:]:
             if self.head[0] == el[0] and self.head[1] == el[1]:
-                self.head = [500, 280]
-                self.body = [[500, 280], [490, 280], [480, 280]]
+                self.head = [495, 285]
+                self.body = [[495, 285], [480, 285], [465, 285]]
                 self.flag = True
                 self.speed.del_speed()
-                Apple().del_apples()
+                self.apple.del_apples()
                 end_game()
                 return True
         if self.head[0] == self.apple_cords[0] and self.head[1] == self.apple_cords[1]:
-            print('TRUE')
-            Apple().del_apples()
-            self.apple_cords = Apple(all_sprites).make_apple()
-            self.flag = False
+            self.apple.del_apples()
             self.speed.speed_up()
+            self.apple = Apple(all_sprites)
+            self.apple_cords = self.apple.make_apple()
+            self.flag = False
             self.body.append([self.head[0], self.head[1]])
-        if self.head[0] > 1000:
-            self.head = [500, 280]
-            self.body = [[500, 280], [490, 280], [480, 280]]
+        if self.head[0] > 990:
+            self.head = [495, 285]
+            self.body = [[495, 285], [480, 285], [465, 285]]
             self.flag = True
             self.speed.del_speed()
-            Apple().del_apples()
+            self.apple.del_apples()
             end_game()
             return True
         else:
             self.body.insert(0, list(self.head))
             for el in self.body:
-                pygame.draw.rect(screen, pygame.Color('red'), (el[0], el[1], 10, 10))
+                pygame.draw.rect(screen, pygame.Color('red'), (el[0], el[1], 15, 15))
             del self.body[-1]
             return False
 
     def run_left(self):
         if self.flag:
-            self.apple_cords = Apple(all_sprites).make_apple()
+            self.apple = Apple(all_sprites)
+            self.apple_cords = self.apple.make_apple()
             self.flag = False
-        self.head[0] -= 10
+        self.head[0] -= 15
         for el in self.body[1:]:
             if self.head[0] == el[0] and self.head[1] == el[1]:
-                self.head = [500, 280]
-                self.body = [[500, 280], [490, 280], [480, 280]]
+                self.head = [495, 285]
+                self.body = [[495, 285], [480, 285], [465, 285]]
                 self.flag = True
                 self.speed.del_speed()
-                Apple().del_apples()
+                self.apple.del_apples()
                 end_game()
                 return True
         if self.head[0] == self.apple_cords[0] and self.head[1] == self.apple_cords[1]:
-            print('TRUE')
-            Apple().del_apples()
-            self.apple_cords = Apple(all_sprites).make_apple()
-            self.body.append([self.head[0], self.head[1]])
-            self.flag = False
+            self.apple.del_apples()
             self.speed.speed_up()
+            self.apple = Apple(all_sprites)
+            self.apple_cords = self.apple.make_apple()
+            self.flag = False
+            self.body.append([self.head[0], self.head[1]])
         if self.head[0] < 0:
-            self.head = [500, 280]
-            self.body = [[500, 280], [490, 280], [480, 280]]
+            self.head = [495, 285]
+            self.body = [[495, 285], [480, 285], [465, 285]]
             self.flag = True
             self.speed.del_speed()
-            Apple().del_apples()
+            self.apple.del_apples()
             end_game()
             return True
         else:
             self.body.insert(0, list(self.head))
             for el in self.body:
-                pygame.draw.rect(screen, pygame.Color('red'), (el[0], el[1], 10, 10))
+                pygame.draw.rect(screen, pygame.Color('red'), (el[0], el[1], 15, 15))
             del self.body[-1]
             return False
 
     def run_down(self):
         if self.flag:
-            self.apple_cords = Apple(all_sprites).make_apple()
+            self.apple = Apple(all_sprites)
+            self.apple_cords = self.apple.make_apple()
             self.flag = False
-        self.head[1] += 10
+        self.head[1] += 15
         for el in self.body[1:]:
             if self.head[0] == el[0] and self.head[1] == el[1]:
-                self.head = [500, 280]
-                self.body = [[500, 280], [490, 280], [480, 280]]
+                self.head = [495, 285]
+                self.body = [[495, 285], [480, 285], [465, 285]]
                 self.flag = True
                 self.speed.del_speed()
-                Apple().del_apples()
+                self.apple.del_apples()
                 end_game()
                 return True
         if self.head[0] == self.apple_cords[0] and self.head[1] == self.apple_cords[1]:
-            print('TRUE')
-            Apple().del_apples()
-            self.apple_cords = Apple(all_sprites).make_apple()
-            self.body.append([self.head[0], self.head[1]])
+            self.apple.del_apples()
             self.speed.speed_up()
-            print(self.speed.ret_speed())
+            self.apple = Apple(all_sprites)
+            self.apple_cords = self.apple.make_apple()
             self.flag = False
-            self.speed.speed_up()
-        if self.head[1] > 650:
-            self.head = [500, 280]
-            self.body = [[500, 280], [490, 280], [480, 280]]
+            self.body.append([self.head[0], self.head[1]])
+        if self.head[1] > 645:
+            self.head = [495, 285]
+            self.body = [[495, 285], [480, 285], [465, 285]]
             self.flag = True
             self.speed.del_speed()
-            Apple().del_apples()
+            self.apple.del_apples()
             end_game()
             return True
         else:
             self.body.insert(0, list(self.head))
             for el in self.body:
-                pygame.draw.rect(screen, pygame.Color('red'), (el[0], el[1], 10, 10))
+                pygame.draw.rect(screen, pygame.Color('red'), (el[0], el[1], 15, 15))
             del self.body[-1]
             return False
 
     def run_up(self):
         if self.flag:
-            self.apple_cords = Apple(all_sprites).make_apple()
+            self.apple = Apple(all_sprites)
+            self.apple_cords = self.apple.make_apple()
             self.flag = False
-        self.head[1] -= 10
+        self.head[1] -= 15
         for el in self.body[1:]:
             if self.head[0] == el[0] and self.head[1] == el[1]:
-                self.head = [500, 280]
-                self.body = [[500, 280], [490, 280], [480, 280]]
+                self.head = [495, 285]
+                self.body = [[495, 285], [480, 285], [465, 285]]
                 self.flag = True
                 self.speed.del_speed()
-                Apple().del_apples()
+                self.apple.del_apples()
                 end_game()
                 return True
-        print(self.apple_cords)
         if self.head[1] < 0:
-            self.head = [500, 280]
-            self.body = [[500, 280], [490, 280], [480, 280]]
+            self.head = [495, 285]
+            self.body = [[495, 285], [480, 285], [465, 285]]
             self.flag = True
             self.speed.del_speed()
-            Apple().del_apples()
+            self.apple.del_apples()
             end_game()
             return True
         else:
             self.body.insert(0, list(self.head))
             for el in self.body:
-                pygame.draw.rect(screen, pygame.Color('red'), (el[0], el[1], 10, 10))
+                pygame.draw.rect(screen, pygame.Color('red'), (el[0], el[1], 15, 15))
             if self.head[0] == self.apple_cords[0] and self.head[1] == self.apple_cords[1]:
-                print('TRUE')
-                Apple().del_apples()
-                # Apple(all_sprites)
-                self.apple_cords = Apple(all_sprites).make_apple()
-                self.body.append([self.head[0], self.head[1]])
-                self.flag = False
+                self.apple.del_apples()
                 self.speed.speed_up()
+                self.apple = Apple(all_sprites)
+                self.apple_cords = self.apple.make_apple()
+                self.flag = False
+                self.body.append([self.head[0], self.head[1]])
             else:
                 del self.body[-1]
             return False
 
     def update_speed(self):
         return self.speed.ret_speed()
+
+    def g_score(self):
+        return self.apple.get_score()
 
 
 def terminate():
@@ -248,15 +260,19 @@ def start_screen():
 class Speed:
     def __init__(self):
         self.speed = 20
+        self.score = 0
 
     def speed_up(self):
         self.speed += 1
+        self.score += snake.g_score()
+
 
     def del_speed(self):
         self.speed = 20
+        self.score = 0
 
     def ret_speed(self):
-        return self.speed
+        return self.speed, self.score
 
 
 def end_game():
@@ -280,7 +296,7 @@ def end_game():
             if e.type == pygame.QUIT:
                 terminate()
             elif keys[pygame.K_SPACE]:
-                pygame.draw.rect(screen, pygame.Color('red'), (500, 275, 10, 10))
+                pygame.draw.rect(screen, pygame.Color('red'), (495, 285, 15, 15))
                 start_screen()
                 return
         pygame.display.flip()
@@ -300,14 +316,15 @@ END = False
 # TIMEREVENT = pygame.USEREVENT + 1
 # pygame.time.set_timer(TIMEREVENT, 5000)
 font2 = pygame.font.SysFont('Arial', 30)
-string_rendered = font2.render('СЧЁТ: ', 1, pygame.Color('white'))
+score = font2.render('СЧЁТ: ', 1, pygame.Color('white'))
 snake = Snake()
 while running:
     screen.fill(pygame.Color('black'))
-    speed = snake.update_speed()
+    speed = snake.update_speed()[0]
+    score = font2.render(f'СЧЁТ: {snake.update_speed()[1]}', 1, pygame.Color('white'))
     if not (down or up or right or left):
         apples_cords = []
-        pygame.draw.rect(screen, pygame.Color('red'), (500, 280, 30, 10))
+        pygame.draw.rect(screen, pygame.Color('red'), (495, 285, 45, 15))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             terminate()
@@ -354,7 +371,7 @@ while running:
         if snake.run_down():
             down = False
             do = True
-    screen.blit(string_rendered, (0, 0))
+    screen.blit(score, (0, 0))
     all_sprites.draw(screen)
     clock.tick(speed)
     pygame.display.flip()
