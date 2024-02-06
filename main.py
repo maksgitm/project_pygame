@@ -209,11 +209,47 @@ class Snake:
                 del self.body[-1]
             return False
 
+    def reject_game(self):
+        self.head = [495, 285]
+        self.body = [[495, 285], [480, 285], [465, 285]]
+        self.flag = True
+        self.speed.del_speed()
+        self.apple.del_apples()
+        won_game()
+
     def update_speed(self):
         return self.speed.ret_speed()
 
     def g_score(self):
         return self.apple.get_score()
+
+
+def won_game():
+    intro_text = ["Поздравляем!",
+                  "Вы победили!"]
+    fon = pygame.transform.scale(load_image('win.gif'), (WIDTH, HEIGHT))
+    screen.blit(fon, (0, 0))
+    font = pygame.font.Font(None, 30)
+    text_coord = 50
+    for line in intro_text:
+        string_rendered = font.render(line, 1, pygame.Color('black'))
+        intro_rect = string_rendered.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+        text_coord += 10
+        intro_rect.top = text_coord
+        text_coord += intro_rect.height
+        screen.blit(string_rendered, intro_rect)
+
+    while True:
+        for e in pygame.event.get():
+            keys = pygame.key.get_pressed()
+            if e.type == pygame.QUIT:
+                terminate()
+            elif keys[pygame.K_SPACE]:
+                pygame.draw.rect(screen, pygame.Color('red'), (495, 285, 15, 15))
+                start_screen()
+                return
+        pygame.display.flip()
+        clock.tick(100)
 
 
 def terminate():
@@ -265,7 +301,6 @@ class Speed:
     def speed_up(self):
         self.speed += 1
         self.score += snake.g_score()
-
 
     def del_speed(self):
         self.speed = 20
@@ -321,6 +356,13 @@ snake = Snake()
 while running:
     screen.fill(pygame.Color('black'))
     speed = snake.update_speed()[0]
+    if snake.update_speed()[1] >= 500:
+        do = True
+        up = False
+        down = False
+        left = False
+        right = False
+        snake.reject_game()
     score = font2.render(f'СЧЁТ: {snake.update_speed()[1]}', 1, pygame.Color('white'))
     if not (down or up or right or left):
         apples_cords = []
