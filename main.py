@@ -93,7 +93,7 @@ class Snake:
         else:
             self.body.insert(0, list(self.head))
             for el in self.body:
-                pygame.draw.rect(screen, pygame.Color('red'), (el[0], el[1], 15, 15))
+                pygame.draw.rect(screen, (235, 0, 0), (el[0], el[1], 15, 15))
             del self.body[-1]
             return False
 
@@ -130,7 +130,7 @@ class Snake:
         else:
             self.body.insert(0, list(self.head))
             for el in self.body:
-                pygame.draw.rect(screen, pygame.Color('red'), (el[0], el[1], 15, 15))
+                pygame.draw.rect(screen, (235, 0, 0), (el[0], el[1], 15, 15))
             del self.body[-1]
             return False
 
@@ -167,7 +167,7 @@ class Snake:
         else:
             self.body.insert(0, list(self.head))
             for el in self.body:
-                pygame.draw.rect(screen, pygame.Color('red'), (el[0], el[1], 15, 15))
+                pygame.draw.rect(screen, (235, 0, 0), (el[0], el[1], 15, 15))
             del self.body[-1]
             return False
 
@@ -197,7 +197,7 @@ class Snake:
         else:
             self.body.insert(0, list(self.head))
             for el in self.body:
-                pygame.draw.rect(screen, pygame.Color('red'), (el[0], el[1], 15, 15))
+                pygame.draw.rect(screen, (235, 0, 0), (el[0], el[1], 15, 15))
             if self.head[0] == self.apple_cords[0] and self.head[1] == self.apple_cords[1]:
                 self.apple.del_apples()
                 self.speed.speed_up()
@@ -245,7 +245,7 @@ def won_game():
             if e.type == pygame.QUIT:
                 terminate()
             elif keys[pygame.K_SPACE]:
-                pygame.draw.rect(screen, pygame.Color('red'), (495, 285, 15, 15))
+                pygame.draw.rect(screen, (225, 0, 0), (495, 285, 15, 15))
                 start_screen()
                 return
         pygame.display.flip()
@@ -258,29 +258,33 @@ def terminate():
 
 
 def start_screen():
-    intro_text = ["ЗМЕЙКА", "",
-                  "Правила игры",
-                  "Наберите как можно больше очков,",
-                  "поглощая яблоки. Управляйте змейкой",
-                  "с помощью клавиш перемещения (стрелочек)",
-                  "",
-                  "",
-                  "",
-                  "",
-                  "",
-                  "НАЖМИТЕ НА ПРОБЕЛ, ЧТОБЫ ПРОДОЛЖИТЬ"]
+    # intro_text = ["ЗМЕЙКА", "",
+    #               "Правила игры",
+    #               "Наберите как можно больше очков,",
+    #               "поглощая яблоки. Управляйте змейкой",
+    #               "с помощью клавиш перемещения (стрелочек)",
+    #               "",
+    #               "",
+    #               "",
+    #               "",
+    #               "",
+    #               "НАЖМИТЕ НА ПРОБЕЛ, ЧТОБЫ ПРОДОЛЖИТЬ"]
 
     fon = pygame.transform.scale(load_image('snake_fon.jpg'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
+    fon2 = pygame.transform.scale(load_image('fon2.gif'), (550, 150))
+    screen.blit(fon2, (WIDTH // 4 - 20, HEIGHT // 2 - 70))
+    fon3 = pygame.transform.scale(load_image('fon3.gif'), (450, 120))
+    screen.blit(fon3, (280, -20))
     font = pygame.font.Font(None, 30)
     text_coord = 50
-    for line in intro_text:
-        string_rendered = font.render(line, 1, pygame.Color('black'))
-        intro_rect = string_rendered.get_rect(center=(WIDTH // 2, HEIGHT // 2))
-        text_coord += 10
-        intro_rect.top = text_coord
-        text_coord += intro_rect.height
-        screen.blit(string_rendered, intro_rect)
+    # for line in intro_text:
+    #     string_rendered = font.render(line, 1, pygame.Color('black'))
+    #     intro_rect = string_rendered.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+    #     text_coord += 10
+    #     intro_rect.top = text_coord
+    #     text_coord += intro_rect.height
+    #     screen.blit(string_rendered, intro_rect)
 
     while True:
         for e in pygame.event.get():
@@ -331,7 +335,7 @@ def end_game():
             if e.type == pygame.QUIT:
                 terminate()
             elif keys[pygame.K_SPACE]:
-                pygame.draw.rect(screen, pygame.Color('red'), (495, 285, 15, 15))
+                pygame.draw.rect(screen, (235, 0, 0), (495, 285, 15, 15))
                 start_screen()
                 return
         pygame.display.flip()
@@ -353,8 +357,9 @@ END = False
 font2 = pygame.font.SysFont('Arial', 30)
 score = font2.render('СЧЁТ: ', 1, pygame.Color('white'))
 snake = Snake()
+grass = load_image('grass2.png')
 while running:
-    screen.fill(pygame.Color('black'))
+    screen.blit(grass, (0, 0))
     speed = snake.update_speed()[0]
     if snake.update_speed()[1] >= 500:
         do = True
@@ -366,7 +371,7 @@ while running:
     score = font2.render(f'СЧЁТ: {snake.update_speed()[1]}', 1, pygame.Color('white'))
     if not (down or up or right or left):
         apples_cords = []
-        pygame.draw.rect(screen, pygame.Color('red'), (495, 285, 45, 15))
+        pygame.draw.rect(screen, (235, 0, 0), (495, 285, 45, 15))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             terminate()
