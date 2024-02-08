@@ -2,12 +2,15 @@ import pygame
 import random
 import sys
 import os
+from math import inf
 
 
 pygame.init()
 WIDTH, HEIGHT = size = 990, 645
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption('Змейка')
+pygame.mixer.music.load('data/start_music.mp3')
+pygame.mixer.music.play(-1)
 
 
 def load_image(name, colorkey=None):
@@ -71,9 +74,9 @@ class Snake:
                 self.head = [495, 285]
                 self.body = [[495, 285], [480, 285], [465, 285]]
                 self.flag = True
-                self.speed.del_speed()
                 self.apple.del_apples()
-                end_game()
+                end_game(self.speed.ret_speed()[1])
+                self.speed.del_speed()
                 return True
         if self.head[0] == self.apple_cords[0] and self.head[1] == self.apple_cords[1]:
             self.apple.del_apples()
@@ -86,9 +89,9 @@ class Snake:
             self.head = [495, 285]
             self.body = [[495, 285], [480, 285], [465, 285]]
             self.flag = True
-            self.speed.del_speed()
             self.apple.del_apples()
-            end_game()
+            end_game(self.speed.ret_speed()[1])
+            self.speed.del_speed()
             return True
         else:
             self.body.insert(0, list(self.head))
@@ -108,9 +111,9 @@ class Snake:
                 self.head = [495, 285]
                 self.body = [[495, 285], [480, 285], [465, 285]]
                 self.flag = True
-                self.speed.del_speed()
                 self.apple.del_apples()
-                end_game()
+                end_game(self.speed.ret_speed()[1])
+                self.speed.del_speed()
                 return True
         if self.head[0] == self.apple_cords[0] and self.head[1] == self.apple_cords[1]:
             self.apple.del_apples()
@@ -123,9 +126,9 @@ class Snake:
             self.head = [495, 285]
             self.body = [[495, 285], [480, 285], [465, 285]]
             self.flag = True
-            self.speed.del_speed()
             self.apple.del_apples()
-            end_game()
+            end_game(self.speed.ret_speed()[1])
+            self.speed.del_speed()
             return True
         else:
             self.body.insert(0, list(self.head))
@@ -145,9 +148,9 @@ class Snake:
                 self.head = [495, 285]
                 self.body = [[495, 285], [480, 285], [465, 285]]
                 self.flag = True
-                self.speed.del_speed()
                 self.apple.del_apples()
-                end_game()
+                end_game(self.speed.ret_speed()[1])
+                self.speed.del_speed()
                 return True
         if self.head[0] == self.apple_cords[0] and self.head[1] == self.apple_cords[1]:
             self.apple.del_apples()
@@ -160,9 +163,9 @@ class Snake:
             self.head = [495, 285]
             self.body = [[495, 285], [480, 285], [465, 285]]
             self.flag = True
-            self.speed.del_speed()
             self.apple.del_apples()
-            end_game()
+            end_game(self.speed.ret_speed()[1])
+            self.speed.del_speed()
             return True
         else:
             self.body.insert(0, list(self.head))
@@ -182,17 +185,17 @@ class Snake:
                 self.head = [495, 285]
                 self.body = [[495, 285], [480, 285], [465, 285]]
                 self.flag = True
-                self.speed.del_speed()
                 self.apple.del_apples()
-                end_game()
+                end_game(self.speed.ret_speed()[1])
+                self.speed.del_speed()
                 return True
         if self.head[1] < 0:
             self.head = [495, 285]
             self.body = [[495, 285], [480, 285], [465, 285]]
             self.flag = True
-            self.speed.del_speed()
             self.apple.del_apples()
-            end_game()
+            end_game(self.speed.ret_speed()[1])
+            self.speed.del_speed()
             return True
         else:
             self.body.insert(0, list(self.head))
@@ -225,19 +228,22 @@ class Snake:
 
 
 def won_game():
-    intro_text = ["Поздравляем!",
-                  "Вы победили!"]
-    fon = pygame.transform.scale(load_image('win.gif'), (WIDTH, HEIGHT))
+    pygame.mixer.music.unload()
+    pygame.mixer.music.load('data/win_sound.mp3')
+    pygame.mixer.music.play(1)
+    fon = pygame.transform.scale(load_image('snake_win.jpg'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
+    fon2 = pygame.transform.scale(load_image('won_text.png'), (600, 150))
+    screen.blit(fon2, (200, 10))
     font = pygame.font.Font(None, 30)
     text_coord = 50
-    for line in intro_text:
-        string_rendered = font.render(line, 1, pygame.Color('black'))
-        intro_rect = string_rendered.get_rect(center=(WIDTH // 2, HEIGHT // 2))
-        text_coord += 10
-        intro_rect.top = text_coord
-        text_coord += intro_rect.height
-        screen.blit(string_rendered, intro_rect)
+    # for line in intro_text:
+    #     string_rendered = font.render(line, 1, pygame.Color('black'))
+    #     intro_rect = string_rendered.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+    #     text_coord += 10
+    #     intro_rect.top = text_coord
+    #     text_coord += intro_rect.height
+    #     screen.blit(string_rendered, intro_rect)
 
     while True:
         for e in pygame.event.get():
@@ -258,18 +264,9 @@ def terminate():
 
 
 def start_screen():
-    # intro_text = ["ЗМЕЙКА", "",
-    #               "Правила игры",
-    #               "Наберите как можно больше очков,",
-    #               "поглощая яблоки. Управляйте змейкой",
-    #               "с помощью клавиш перемещения (стрелочек)",
-    #               "",
-    #               "",
-    #               "",
-    #               "",
-    #               "",
-    #               "НАЖМИТЕ НА ПРОБЕЛ, ЧТОБЫ ПРОДОЛЖИТЬ"]
-
+    pygame.mixer.music.unload()
+    pygame.mixer.music.load('data/start_music.mp3')
+    pygame.mixer.music.play(-1)
     fon = pygame.transform.scale(load_image('snake_fon.jpg'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
     fon2 = pygame.transform.scale(load_image('fon2.gif'), (550, 150))
@@ -314,13 +311,17 @@ class Speed:
         return self.speed, self.score
 
 
-def end_game():
-    intro_text = ["Вы проиграли!", "",
-                  "Нажмите на пробел, чтобы начать заново"]
-    fon = pygame.transform.scale(load_image('snake_end_game.png'), (WIDTH, HEIGHT))
+def end_game(score):
+    pygame.mixer.music.unload()
+    pygame.mixer.music.load('data/death_sound.mp3')
+    pygame.mixer.music.play(1)
+    fon = pygame.transform.scale(load_image('dead_fon.png'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
-    font = pygame.font.Font(None, 30)
-    text_coord = 50
+    fon2 = pygame.transform.scale(load_image('dead_text.png'), (600, 150))
+    screen.blit(fon2, (220, 250))
+    font = pygame.font.Font('data/шрифт.ttf', 30)
+    intro_text = [f"Your score: {score}"]
+    text_coord = 550
     for line in intro_text:
         string_rendered = font.render(line, 1, pygame.Color('white'))
         intro_rect = string_rendered.get_rect(center=(WIDTH // 2, HEIGHT // 2))
@@ -354,21 +355,21 @@ do = True
 END = False
 # TIMEREVENT = pygame.USEREVENT + 1
 # pygame.time.set_timer(TIMEREVENT, 5000)
-font2 = pygame.font.SysFont('Arial', 30)
-score = font2.render('СЧЁТ: ', 1, pygame.Color('white'))
+font2 = pygame.font.Font('data/шрифт.ttf', 30)
+score = font2.render('Score: ', 1, pygame.Color('white'))
 snake = Snake()
 grass = load_image('grass2.png')
 while running:
     screen.blit(grass, (0, 0))
     speed = snake.update_speed()[0]
-    if snake.update_speed()[1] >= 500:
+    if snake.update_speed()[1] >= 2000:
         do = True
         up = False
         down = False
         left = False
         right = False
         snake.reject_game()
-    score = font2.render(f'СЧЁТ: {snake.update_speed()[1]}', 1, pygame.Color('white'))
+    score = font2.render(f'Score: {snake.update_speed()[1]}', 1, pygame.Color('white'))
     if not (down or up or right or left):
         apples_cords = []
         pygame.draw.rect(screen, (235, 0, 0), (495, 285, 45, 15))
