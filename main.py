@@ -2,7 +2,6 @@ import pygame
 import random
 import sys
 import os
-from math import inf
 
 
 pygame.init()
